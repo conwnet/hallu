@@ -1,0 +1,11 @@
+.root {
+    display: flex !important;
+
+    .select {
+        width: 100px;
+    }
+
+    .input {
+        flex: 1;
+    }
+}

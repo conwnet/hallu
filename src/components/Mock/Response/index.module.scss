@@ -1,0 +1,14 @@
+.root {
+    .methods {
+        margin: 15px 0;
+
+        > label {
+            font-weight: bold;
+        }
+
+        > span {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    }
+}

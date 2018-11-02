@@ -1,0 +1,13 @@
+.root {
+    background-color: #f0f0f0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    // content component
+    > :last-child {
+        flex: 1;
+    }
+}
