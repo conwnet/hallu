@@ -5,9 +5,9 @@ import styles from './index.module.scss';
 const Header = () => (
     <div className={styles.root}>
         <div className="root">HALLU</div>
-        <NavLink to="/mock">Mock</NavLink>
-        <NavLink to="/request">Request</NavLink>
-        <NavLink to="/rewrite">Rewrite</NavLink>
+        <NavLink to="/mocks">Mock</NavLink>
+        <NavLink to="/requests">Request</NavLink>
+        <NavLink to="/rewrites">Rewrite</NavLink>
     </div>
 );
 

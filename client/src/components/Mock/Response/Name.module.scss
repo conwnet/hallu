@@ -1,0 +1,14 @@
+.root {
+    > i {
+        margin-left: 10px;
+        cursor: pointer;
+
+        &:hover {
+            color: #1890ff;
+        }
+    }
+}
+
+.input {
+    max-width: 350px;
+}
