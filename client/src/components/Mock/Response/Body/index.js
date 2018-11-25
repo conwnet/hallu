@@ -10,7 +10,7 @@ const Body = ({value: body, onChange}) => {
 
     return (
         <div className={styles.root}>
-            <div className={styles.header}>
+            <div className={styles.title}>
                 <div>Body</div>
                 <Radio.Group value={type} onChange={handleTypeChange} buttonStyle="solid">
                     <Radio.Button value="raw">Raw</Radio.Button>

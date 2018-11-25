@@ -2,6 +2,8 @@ import React from 'react';
 import {Input, Select} from 'antd';
 import styles from './Url.module.scss';
 
+const {Option} = Select;
+
 const Url = ({value: url, onChange}) => {
     const {type, value} = url;
 
@@ -12,9 +14,9 @@ const Url = ({value: url, onChange}) => {
                 className={styles.select}
                 onChange={type => onChange({type, value})}
             >
-                <Select.Option value="path">Path</Select.Option>
-                <Select.Option value="regexp">RegExp</Select.Option>
-                <Select.Option value="raw">Raw</Select.Option>
+                <Option value="path">Path</Option>
+                <Option value="regexp">RegExp</Option>
+                <Option value="raw">Raw</Option>
             </Select>
             <Input
                 value={value}

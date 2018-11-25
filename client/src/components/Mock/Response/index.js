@@ -5,6 +5,7 @@ import {compose, withState} from 'recompose';
 import Name from './Name';
 import Url from './Url';
 import Methods from './Methods';
+import Status from './Status';
 import Headers from './Headers';
 import Body from './Body';
 import styles from './index.module.scss';
@@ -18,6 +19,7 @@ const Response = ({
     headers,
     body,
     setName,
+    setStatus,
     setUrl,
     setMethods,
     setHeaders,
@@ -44,8 +46,11 @@ const Response = ({
         <Card className={styles.root} title={title}>
             <Url value={url} onChange={setUrl} />
             <Methods value={methods} onChange={setMethods} />
-            <div className={styles.detail}>
-                <Headers value={headers} onChange={setHeaders} />
+            <div className={styles.response}>
+                <div className={styles.header}>
+                    <Status value={status} onChange={setStatus} />
+                    <Headers value={headers} onChange={setHeaders} />
+                </div>
                 <Body value={body} onChange={setBody}></Body>
             </div>
         </Card>
