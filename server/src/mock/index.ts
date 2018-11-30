@@ -1,26 +1,47 @@
-import 'fs';
+/**
+ * @file Mock Server Koa Middleware
+ * @author netcon <netcon@live.com>
+ */
+
 import * as Koa from 'koa';
+import {find, get, at, partial, fromPairs} from 'lodash/fp';
+import * as requireFromString from 'require-from-string';
+import * as p2e from "path-to-regexp";
 import {Mock} from './types';
-import * as p2e from 'path-to-regexp';
 
-const mocks: Mock[] = [];
-
-const matchUrl = ({type, value}, url) => (
-    type === 'path' && p2e(value).test(url)
-    || type === 'raw' && value === url
-    || type === 'regexp' && (new RegExp(value)).test(url)
-);
-const match: (mock: Mock, request: Koa.Request) => boolean = (mock, request) => (
-        mock.status
-        && matchUrl(mock.url, request.url)
-        && mock.methods.includes(request.method.toUpperCase())
+const matchUrl: (urlObj: Mock.Url, url: string) => boolean = ({type, value}, url) => (
+    type === Mock.Url.Type.Path && p2e(value).test(url)
+    || type === Mock.Url.Type.Raw && value === url
+    || type === Mock.Url.Type.RegExp && (new RegExp(value)).test(url)
 );
 
-const middleware: Koa.Middleware = (ctx: Koa.Context, next: Function) => {
-    for (let mock of mocks) {
-        if (match(mock, ctx.request)) {
+const match: (request: Koa.Request, mock: Mock, ) => boolean = (request, mock) => (
+    mock.status === Mock.Status.Running
+    && matchUrl(mock.url, request.url)
+    && mock.methods.includes(Mock.Method[request.method.toUpperCase()])
+);
 
-        }
-    }
+const calcHeaders: (headers: Mock.Response.Header[]) => {[key: string]: string} = headers => (
+    fromPairs(headers.filter(get('used')).map((<any>at(['key', 'value']))))
+);
+
+const calcBody: (ctx: Koa.Context, body: Mock.Response.Body) => Promise<string> = async (ctx, body) => (
+    body.type === Mock.Response.Body.Type.Script
+        ? await requireFromString(body.value)(ctx.request, ctx.response)
+        : body.value
+);
+
+const resolve: (ctx: Koa.Context, response: Mock.Response) => void = async (ctx, {status, message, headers, body}) => {
+    ctx.response.body = await calcBody(ctx, body);
+    ctx.response.status = status;
+    ctx.response.message = message;
+    ctx.response.set(calcHeaders(headers));
+};
+
+const createMiddleware: (mocks: Mock[]) => (ctx: Koa.Context, next: Function) => void = mocks => async (ctx, next) => {
+    const mock = find(partial(match, [ctx.request]), mocks);
+    mock && await resolve(ctx, mock.response);
     next();
-}
+};
+
+export default createMiddleware;

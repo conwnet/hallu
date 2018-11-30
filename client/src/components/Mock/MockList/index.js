@@ -1,25 +1,27 @@
 import React from 'react';
-import {merge} from 'lodash/fp';
 import {withRouter} from 'react-router-dom';
 import {List, Button, Icon} from 'antd';
 import {NavLink} from 'react-router-dom';
+import {Mock} from '../../../constants';
 import styles from './index.module.scss';
 
-const defaultMock = {
+const createDefaultMock = () => ({
     id: 'new',
     name: '',
-    running: false,
-    status: {code: 200, message: 'OK'},
-    url: {type: 'path', value: ''},
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH'],
-    headers: [],
-    body: {type: 'raw', value: ''}
-};
+    status: Mock.Status.Running,
+    url: {type: Mock.Url.Type.Path, value: ''},
+    methods: Object.values(Mock.Method),
+    response: {
+        status: {code: 200, message: 'OK'},
+        headers: [],
+        body: {type: Mock.Response.Body.Type.Raw, value: ''}
+    }
+});
 
-const renderItem = ({id, running, name, url}) => (
+const renderItem = ({id, name, status, url}) => (
     <List.Item className={styles.item}>
         <NavLink to={`/mocks/${id}`}>
-            <Icon type="fire" theme={running ? 'filled' : 'outlined'} />
+            <Icon type="fire" theme={status === Mock.Status.Running ? 'filled' : 'outlined'} />
             <span>{name || url.value || 'Unnamed'}</span>
         </NavLink>
     </List.Item>
@@ -27,7 +29,7 @@ const renderItem = ({id, running, name, url}) => (
 
 const MockList = ({value, onChange, history}) => {
     const handleNewMock = () => {
-        onChange([...value, merge({}, defaultMock)]);
+        onChange([...value, createDefaultMock()]);
         history.push('/mocks/new');
     };
 

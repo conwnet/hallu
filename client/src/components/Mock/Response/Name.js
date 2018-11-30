@@ -12,7 +12,7 @@ const Name = ({value, editing, onChange, setEditing}) => (
                     className={styles.input}
                     onBlur={() => setEditing(false)}
                     onChange={event => onChange(event.target.value)}
-                    ref={element => element && element.focus()}
+                    autoFocus
                 />
             ) : (
                 <>

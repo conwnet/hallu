@@ -8,6 +8,7 @@ import Methods from './Methods';
 import Status from './Status';
 import Headers from './Headers';
 import Body from './Body';
+import {updateMock} from "../../../api";
 import styles from './index.module.scss';
 
 const Response = ({
@@ -26,10 +27,10 @@ const Response = ({
     setBody,
     onChange
 }) => {
-    const handleSave = () => {
-        const mock = {id, name, status, url, methods, headers, body};
+    const handleSave = async () => {
+        const mock = {id, name, url, status: 1, methods, response: {status, headers, body}};
 
-        onChange(mock);
+        onChange(await updateMock(mock));
     };
 
     const title = (
@@ -51,7 +52,7 @@ const Response = ({
                     <Status value={status} onChange={setStatus} />
                     <Headers value={headers} onChange={setHeaders} />
                 </div>
-                <Body value={body} onChange={setBody}></Body>
+                <Body value={body} onChange={setBody} />
             </div>
         </Card>
     );
@@ -60,11 +61,11 @@ const Response = ({
 const withHooks = compose(
     withState('id', 'setId', get('value.id')),
     withState('name', 'setName', get('value.name')),
-    withState('status', 'setStatus', get('value.status')),
     withState('url', 'setUrl', get('value.url')),
     withState('methods', 'setMethods', get('value.methods')),
-    withState('headers', 'setHeaders', get('value.headers')),
-    withState('body', 'setBody', get('value.body'))
+    withState('status', 'setStatus', get('value.response.status')),
+    withState('headers', 'setHeaders', get('value.response.headers')),
+    withState('body', 'setBody', get('value.response.body'))
 );
 
 export default withHooks(Response);
