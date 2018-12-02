@@ -10,6 +10,6 @@ const app = new Koa();
 
 app.use(cors());
 app.use(bodyParser());
-app.use(mock(mocks));
+app.use(mock(mocks.select()));
 
 socket(http.createServer(app.callback())).listen(3001);

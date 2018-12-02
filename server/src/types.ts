@@ -1,7 +1,19 @@
 /**
- * @file Mock Server Koa Middleware Types
+ * @file Server Types
  * @author netcon <netcon@live.com>
  */
+
+export interface Record {
+    id: string | number;
+    [key: string]: any;
+}
+
+export interface Table<T> {
+    select: () => T[];
+    create: (record: T) => number;
+    update: (record: T) => T;
+    delete: (record: T) => T;
+}
 
 export namespace Mock {
     export namespace Url {

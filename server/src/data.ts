@@ -1,15 +1,24 @@
-import {Mock} from "./mock/types";
+import {findIndex, first} from 'lodash/fp';
+import {Mock, Record, Table} from './types'
 
-export const mocks: Mock[] = [{
-    id: '1',
-    name: 'mock-1',
-    status: Mock.Status.Running,
-    url: {type: Mock.Url.Type.Path, value: '/home'},
-    methods: [Mock.Method.GET, Mock.Method.POST],
-    response: {
-        status: 200,
-        message: 'OK',
-        headers: [{used: true, key: 'Content-Type', value: 'text/plain'}],
-        body: {type: Mock.Response.Body.Type.Script, value: 'module.exports = async i => Promise.resolve(i)'}
+const isEqualRecord = record => ({id}) => id === record.id;
+const createTable: <T extends Record>(table: T[]) => Table<T> = table => ({
+    select() {
+        return table;
+    },
+    create(record) {
+        return table.push(record);
+    },
+    update(record) {
+        const index = findIndex(isEqualRecord(record), table);
+
+        return index < 0 ? null : first(table.splice(index, 1, record));
+    },
+    delete(record) {
+        const index = findIndex(isEqualRecord(record), table);
+
+        return index < 0 ? null : first(table.splice(index, 1));
     }
-}];
+});
+
+export const mocks = createTable<Mock>([]);
