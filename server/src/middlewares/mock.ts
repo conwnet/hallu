@@ -7,7 +7,7 @@ import * as Koa from 'koa';
 import {find, get, at, partial, fromPairs} from 'lodash/fp';
 import * as requireFromString from 'require-from-string';
 import * as p2e from "path-to-regexp";
-import {Mock} from './types';
+import {Mock} from '../types';
 
 const matchUrl: (urlObj: Mock.Url, url: string) => boolean = ({type, value}, url) => (
     type === Mock.Url.Type.Path && p2e(value).test(url)
@@ -38,10 +38,10 @@ const resolve: (ctx: Koa.Context, response: Mock.Response) => void = async (ctx,
     ctx.response.set(calcHeaders(headers));
 };
 
-const createMiddleware: (mocks: Mock[]) => (ctx: Koa.Context, next: Function) => void = mocks => async (ctx, next) => {
-    const mock = find(partial(match, [ctx.request]), mocks);
+const createMiddleware: (mocks: () => Mock[]) => Koa.Middleware = getMocks => async (ctx, next) => {
+    const mock = find(partial(match, [ctx.request]), getMocks());
     mock && await resolve(ctx, mock.response);
-    next();
+    await next();
 };
 
 export default createMiddleware;

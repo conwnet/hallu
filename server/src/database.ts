@@ -7,7 +7,7 @@ const createTable: <T extends Record>(table: T[]) => Table<T> = table => ({
         return table;
     },
     create(record) {
-        return table.push(record);
+        return table.push(record) && record;
     },
     update(record) {
         const index = findIndex(isEqualRecord(record), table);
@@ -21,4 +21,6 @@ const createTable: <T extends Record>(table: T[]) => Table<T> = table => ({
     }
 });
 
-export const mocks = createTable<Mock>([]);
+export namespace db {
+    export const mocks = createTable<Mock>([]);
+}

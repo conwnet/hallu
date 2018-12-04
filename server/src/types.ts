@@ -10,7 +10,7 @@ export interface Record {
 
 export interface Table<T> {
     select: () => T[];
-    create: (record: T) => number;
+    create: (record: T) => T;
     update: (record: T) => T;
     delete: (record: T) => T;
 }
@@ -79,4 +79,8 @@ export interface Mock {
     url: Mock.Url,
     methods: Mock.Method[];
     response: Mock.Response;
+}
+
+export interface Controller {
+    [event: string]: (...any: any[]) => any;
 }

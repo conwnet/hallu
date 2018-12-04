@@ -2,14 +2,14 @@ import * as http from 'http';
 import * as Koa from 'koa';
 import * as cors from '@koa/cors';
 import * as bodyParser from 'koa-bodyparser';
-import mock from './mock';
-import socket from './socket';
-import {mocks} from './data';
+import {createMockMiddleware} from './middlewares';
+import control from './controllers';
+import {db} from './database';
 
 const app = new Koa();
 
 app.use(cors());
 app.use(bodyParser());
-app.use(mock(mocks.select()));
+app.use(createMockMiddleware(db.mocks.select));
 
-socket(http.createServer(app.callback())).listen(3001);
+control(http.createServer(app.callback())).listen(3001);
