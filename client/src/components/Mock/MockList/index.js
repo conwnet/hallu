@@ -12,7 +12,8 @@ const createDefaultMock = () => ({
     url: {type: Mock.Url.Type.Path, value: ''},
     methods: Object.values(Mock.Method),
     response: {
-        status: {code: 200, message: 'OK'},
+        status: 200,
+        message: 'OK',
         headers: [],
         body: {type: Mock.Response.Body.Type.Raw, value: ''}
     }

@@ -12,25 +12,32 @@ import {updateMock} from "../../../api";
 import styles from './index.module.scss';
 
 const Response = ({
-    id,
+    value,
     name,
-    status,
     url,
     methods,
+    status,
+    message,
     headers,
     body,
     setName,
-    setStatus,
     setUrl,
     setMethods,
+    setStatus,
+    setMessage,
     setHeaders,
     setBody,
     onChange
 }) => {
     const handleSave = async () => {
-        const mock = {id, name, url, status: 1, methods, response: {status, headers, body}};
+        const mock = {id: value.id, name, url, status: 1, methods, response: {status, message, headers, body}};
 
-        onChange(await updateMock(mock));
+        onChange({...mock, id: await updateMock(mock)});
+    };
+
+    const setStatusAndMessage = ({status, message}) => {
+        setStatus(status);
+        setMessage(message);
     };
 
     const title = (
@@ -49,7 +56,7 @@ const Response = ({
             <Methods value={methods} onChange={setMethods} />
             <div className={styles.response}>
                 <div className={styles.header}>
-                    <Status value={status} onChange={setStatus} />
+                    <Status value={{status, message}} onChange={setStatusAndMessage} />
                     <Headers value={headers} onChange={setHeaders} />
                 </div>
                 <Body value={body} onChange={setBody} />
@@ -59,11 +66,11 @@ const Response = ({
 };
 
 const withHooks = compose(
-    withState('id', 'setId', get('value.id')),
     withState('name', 'setName', get('value.name')),
     withState('url', 'setUrl', get('value.url')),
     withState('methods', 'setMethods', get('value.methods')),
     withState('status', 'setStatus', get('value.response.status')),
+    withState('message', 'setMessage', get('value.response.message')),
     withState('headers', 'setHeaders', get('value.response.headers')),
     withState('body', 'setBody', get('value.response.body'))
 );

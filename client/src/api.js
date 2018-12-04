@@ -8,5 +8,5 @@ export const fetchMocks = () => new Promise(resolve => {
 });
 
 export const updateMock = mock => new Promise(resolve => {
-    socket.emit('UPDATE_MOCK', mock, compose(resolve, getOr([], 'data')));
+    socket.emit('UPDATE_MOCK', mock, compose(resolve, getOr(null, 'data')));
 });
