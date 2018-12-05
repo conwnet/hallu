@@ -23,7 +23,6 @@
     "@types/lodash": "^4.14.118",
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
-    "koa-router": "^7.4.0",
     "lodash": "^4.17.11",
     "path-to-regexp": "^2.4.0",
     "require-from-string": "^2.0.2",
