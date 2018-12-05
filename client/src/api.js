@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
 import {compose, getOr} from 'lodash/fp';
 
-const socket = io('http://localhost:3001');
+const socket = io('http://localhost:5261');
 
 export const fetchMocks = () => new Promise(resolve => {
     socket.emit('FETCH_MOCKS', compose(resolve, getOr([], 'data')));

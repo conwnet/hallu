@@ -12,4 +12,4 @@ app.use(cors());
 app.use(bodyParser());
 app.use(createMockMiddleware(db.mocks.select));
 
-control(http.createServer(app.callback())).listen(3001);
+export default control(http.createServer(app.callback()));

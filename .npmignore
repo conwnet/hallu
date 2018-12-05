@@ -26,7 +26,6 @@ yarn-error.log*
 .vscode
 .idea
 
-# output
-static
-index.js
-server/**/*.js
+# source code
+client
+*.ts
