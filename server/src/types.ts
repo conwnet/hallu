@@ -53,7 +53,7 @@ export namespace Mock {
         }
 
         export interface Header {
-            used: boolean;
+            using: boolean;
             key: string;
             value: string;
         }

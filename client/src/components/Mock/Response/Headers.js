@@ -35,12 +35,12 @@ const Headers = ({value, onChange}) => {
 
     const rowSelection = {
         onChange: keys => onChange(value.map((item, index) => {
-            return {...item, status: keys.some(key => +key === +index) ? true : false};
+            return {...item, using: keys.some(key => +key === +index) ? true : false};
         })),
-        selectedRowKeys: value.reduce((prev, {status}, index) => status ? [...prev, index] : prev, [])
+        selectedRowKeys: value.reduce((prev, {using}, index) => using ? [...prev, index] : prev, [])
     };
 
-    const handleAdd = () => onChange([...value, {key: '', value: '', status: true}]);
+    const handleAdd = () => onChange([...value, {key: '', value: '', using: true}]);
 
     return (
         <div className={styles.root}>

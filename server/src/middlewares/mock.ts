@@ -22,7 +22,7 @@ const match: (request: Koa.Request, mock: Mock, ) => boolean = (request, mock) =
 );
 
 const calcHeaders: (headers: Mock.Response.Header[]) => {[key: string]: string} = headers => (
-    fromPairs(headers.filter(get('used')).map((<any>at(['key', 'value']))))
+    fromPairs(headers.filter(get('using')).map((<any>at(['key', 'value']))))
 );
 
 const calcBody: (ctx: Koa.Context, body: Mock.Response.Body) => Promise<string> = async (ctx, body) => (
