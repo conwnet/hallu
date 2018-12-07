@@ -26,7 +26,7 @@ const Response = ({
     const title = (
         <div className={styles.title}>
             <Name value={name} onChange={setChange('name')} />
-            <Button onClick={handleOpen} disabled={hasDifference}>
+            <Button onClick={handleOpen} disabled={hasDifference || !current.running}>
                 Open
             </Button>
             <Button type="primary" onClick={() => onChange(current)} disabled={!hasDifference}>
