@@ -1,7 +1,7 @@
 import React from 'react';
-import {get, isEqual} from 'lodash/fp';
+import {set, isEqual, mergeWith, isArray} from 'lodash/fp';
 import {Button, Card} from 'antd';
-import {compose, withState} from 'recompose';
+import {compose, withStateHandlers, withProps} from 'recompose';
 import Name from './Name';
 import Url from './Url';
 import Methods from './Methods';
@@ -12,44 +12,24 @@ import styles from './index.module.scss';
 
 const Response = ({
     value,
-    name,
-    url,
-    methods,
-    status,
-    message,
-    headers,
-    body,
-    setName,
-    setUrl,
-    setMethods,
-    setStatus,
-    setMessage,
-    setHeaders,
-    setBody,
-    onChange
+    change,
+    current,
+    onChange,
+    setChange
 }) => {
-    const buildMock = () => ({
-        id: value.id,
-        running: value.id === 'new' ? true : value.running,
-        name, url, methods, response: {status, message, headers, body}
-    });
-
-    const handleSave = () => onChange(buildMock());
-    const hasDifference = !isEqual(value, buildMock()) || value.id === 'new';
-
+    const {name, url, methods, response: {status, message, headers, body}} = current;
+    const hasDifference = !isEqual(value, current) || value.id === 'new';
     const handleOpen = () => {
         const target = url.value.charAt(0) === '/' ? url.value : '/' + url.value;
         window.open(`http://${window.location.hostname}:5261${target}`);
     };
-
-
     const title = (
         <div className={styles.title}>
-            <Name value={name} onChange={setName} />
+            <Name value={name} onChange={setChange('name')} />
             <Button onClick={handleOpen} disabled={hasDifference}>
                 Open
             </Button>
-            <Button type="primary" onClick={handleSave} disabled={!hasDifference}>
+            <Button type="primary" onClick={() => onChange(current)} disabled={!hasDifference}>
                 Save
             </Button>
         </div>
@@ -57,32 +37,33 @@ const Response = ({
 
     return (
         <Card className={styles.root} title={title}>
-            <Url value={url} onChange={setUrl} />
-            <Methods value={methods} onChange={setMethods} />
+            <Url value={url} onChange={setChange('url')} />
+            <Methods value={methods} onChange={setChange('methods')} />
             <div className={styles.response}>
                 <div className={styles.header}>
                     <StatusAndMessage
                         status={status}
-                        onStatusChange={setStatus}
+                        onStatusChange={setChange('response.status')}
                         message={message}
-                        onMessageChange={setMessage}
+                        onMessageChange={setChange('response.message')}
                     />
-                    <Headers value={headers} onChange={setHeaders} />
+                    <Headers value={headers} onChange={setChange('response.headers')} />
                 </div>
-                <Body value={body} onChange={setBody} />
+                <Body value={body} onChange={setChange('response.body')} />
             </div>
         </Card>
     );
 };
 
+const mergeStrategy = (a, b) => isArray(a) ? b : undefined;
 const withHooks = compose(
-    withState('name', 'setName', get('value.name')),
-    withState('url', 'setUrl', get('value.url')),
-    withState('methods', 'setMethods', get('value.methods')),
-    withState('status', 'setStatus', get('value.response.status')),
-    withState('message', 'setMessage', get('value.response.message')),
-    withState('headers', 'setHeaders', get('value.response.headers')),
-    withState('body', 'setBody', get('value.response.body'))
+    withStateHandlers({change: {}}, {
+        setChange: ({change}) => (path, value) => ({change: set(path, value, change)})
+    }),
+    withProps(props => ({
+        current: mergeWith(mergeStrategy, props.value, props.change),
+        setChange: path => value => props.setChange(path, value)
+    }))
 );
 
 export default withHooks(Response);

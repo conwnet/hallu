@@ -42,11 +42,13 @@
                     line-height: 40px;
                     transition: .1s;
 
-                    &.running {
-                        color: #90ee90;
-
+                    &:global(.anticon-fire) {
                         &:hover {
                             color: #40a9ff;
+                        }
+
+                        .running {
+                            color: #90ee90;
                         }
                     }
 

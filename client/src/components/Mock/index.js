@@ -1,39 +1,29 @@
 import React from 'react';
-import {findIndex} from 'lodash/fp';
+import {findIndex, find} from 'lodash/fp';
 import {compose, withState, lifecycle} from 'recompose';
 import MockList from './MockList';
 import Response from './Response';
+import {createDefaultMock} from './utils';
 import {fetchMocks, updateMock} from "../../api";
-import {HttpMethods} from "../../constants";
 import styles from './index.module.scss';
-
-const createDefaultMock = () => ({
-    id: 'new',
-    name: '',
-    running: false,
-    url: {type: 'path', value: ''},
-    methods: Object.values(HttpMethods),
-    response: {
-        status: 200,
-        message: 'OK',
-        headers: [],
-        body: {type: 'raw', raw: '', script: ''}
-    }
-});
 
 
 const Mock = ({mocks, setMocks, history, match}) => {
-    const {id} = match.params;
-    const index = findIndex({id}, mocks);
-    const handleMockCreate = () => setMocks([...mocks, createDefaultMock()]);
+    const handleMockCreate = () => {
+        setMocks([...mocks, createDefaultMock()]);
+        history.push(`/mocks/new`);
+    };
     const handleMockChange = async mock => {
         const result = await updateMock(mock);
+        const index = findIndex({id: mock.id}, mocks);
+        const position = index < 0 ? findIndex({id: 'new'}, mocks) : index;
 
-        if (result) {
-            setMocks([...mocks.slice(0, index), result, ...mocks.slice(index + 1)]);
+        if (result && position >= 0) {
+            setMocks([...mocks.slice(0, position), result, ...mocks.slice(position + 1)]);
             history.push(`/mocks/${result.id}`);
         }
     };
+    const mock = find({id: match.params.id}, mocks);
 
     return (
         <div className={styles.root}>
@@ -42,7 +32,7 @@ const Mock = ({mocks, setMocks, history, match}) => {
                 onChange={handleMockChange}
                 onCreate={handleMockCreate}
             />
-            {mocks[index] ? <Response value={mocks[index]} onChange={handleMockChange} /> : <div />}
+            {mock ? <Response value={mock} onChange={handleMockChange} /> : <div />}
         </div>
     );
 };

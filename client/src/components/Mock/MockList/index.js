@@ -4,20 +4,29 @@ import {NavLink} from 'react-router-dom';
 import styles from './index.module.scss';
 
 const MockList = ({value, onChange, onCreate}) => {
-    const renderItem = ({id, name, running, url}) => (
-        <List.Item className={styles.item}>
-            <NavLink to={`/mocks/${id}`}>
-                <Icon
-                    type="fire"
-                    className={{[styles.running]: running}}
-                    theme={running ? 'filled' : 'outlined'}
-                    onClick={() => id !== 'new' && onChange({id, running: !running})}
-                />
-                <span>{name || url.value || 'Unnamed'}</span>
-                <Icon type="delete" theme="filled" />
-            </NavLink>
-        </List.Item>
-    );
+    const renderItem = ({id, name, running, url}) => {
+        const handleRunningStatusChange = () => {
+            if (id !== 'new') {
+                onChange({id, running: !running});
+            }
+        };
+        return (
+            <List.Item className={styles.item}>
+                <NavLink to={`/mocks/${id}`}>
+                    <Icon
+                        type="fire"
+                        className={{[styles.running]: running}}
+                        theme={running ? 'filled' : 'outlined'}
+                        onClick={handleRunningStatusChange}
+                    />
+                    <span>
+                    {name || url.value || id.slice(0, 8)}
+                </span>
+                    <Icon type="delete" theme="filled"/>
+                </NavLink>
+            </List.Item>
+        );
+    };
 
     return (
         <div className={styles.root}>
@@ -34,6 +43,6 @@ const MockList = ({value, onChange, onCreate}) => {
             />
         </div>
     );
-}
+};
 
 export default MockList;
