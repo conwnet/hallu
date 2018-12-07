@@ -4,7 +4,7 @@ import {compose, withState, lifecycle} from 'recompose';
 import MockList from './MockList';
 import Response from './Response';
 import {createDefaultMock} from './utils';
-import {fetchMocks, updateMock} from "../../api";
+import {deleteMock, fetchMocks, updateMock} from "../../api";
 import styles from './index.module.scss';
 
 
@@ -23,6 +23,12 @@ const Mock = ({mocks, setMocks, history, match}) => {
             history.push(`/mocks/${result.id}`);
         }
     };
+    const handleMockDelete = async mock => {
+        if (mock.id === 'new' || await deleteMock(mock)) {
+            const index = findIndex({id: mock.id}, mocks);
+            setMocks([...mocks.slice(0, index), ...mocks.slice(index + 1)]);
+        }
+    };
     const mock = find({id: match.params.id}, mocks);
 
     return (
@@ -31,6 +37,7 @@ const Mock = ({mocks, setMocks, history, match}) => {
                 value={mocks}
                 onChange={handleMockChange}
                 onCreate={handleMockCreate}
+                onDelete={handleMockDelete}
             />
             {mock ? <Response value={mock} onChange={handleMockChange} /> : <div />}
         </div>

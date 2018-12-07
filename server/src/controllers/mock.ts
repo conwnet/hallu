@@ -10,6 +10,9 @@ export const mock: Controller = {
             return db.mocks.create(mock);
         }
         return db.mocks.update(mock);
+    },
+    DELETE_MOCK(mock) {
+        return db.mocks.delete(mock);
     }
 };
 
