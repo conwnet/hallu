@@ -20,7 +20,7 @@
   "homepage": "https://github.com/conwnet/hallu#readme",
   "dependencies": {
     "commander": "^2.19.0",
-    "hallu-client": "0.0.1",
-    "hallu-server": "0.0.1"
+    "hallu-client": "0.0.2",
+    "hallu-server": "0.0.2"
   }
 }
