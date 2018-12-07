@@ -17,14 +17,14 @@ const createTable: <T extends Record>(table: T[]) => Table<T> = table => ({
         return table.filter(record => isEqual(record[key], value));
     },
     create(record, generateId = true) {
-        const result = generateId ? merge(record, {id: uuid()}) : record;
+        const result = generateId ? Object.assign(record, {id: uuid()}) : record;
 
         return table.push(result) && result;
     },
     update(record) {
         const index = table.findIndex(isEqualRecord(record));
 
-        return index < 0 ? null : table[index] = merge(table[index], record);
+        return index < 0 ? null : Object.assign(table[index], record);
     },
     delete(record) {
         const index = table.findIndex(isEqualRecord(record));
