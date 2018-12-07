@@ -1,14 +1,13 @@
 import React from 'react';
-import {get} from 'lodash/fp';
+import {get, isEqual} from 'lodash/fp';
 import {Button, Card} from 'antd';
 import {compose, withState} from 'recompose';
 import Name from './Name';
 import Url from './Url';
 import Methods from './Methods';
-import Status from './Status';
+import StatusAndMessage from './StatusAndMessage';
 import Headers from './Headers';
 import Body from './Body';
-import {updateMock} from "../../../api";
 import styles from './index.module.scss';
 
 const Response = ({
@@ -29,22 +28,28 @@ const Response = ({
     setBody,
     onChange
 }) => {
-    const handleSave = async () => {
-        const mock = {id: value.id, name, url, status: 1, methods, response: {status, message, headers, body}};
+    const buildMock = () => ({
+        id: value.id,
+        running: value.id === 'new' ? true : value.running,
+        name, url, methods, response: {status, message, headers, body}
+    });
 
-        onChange({...mock, id: await updateMock(mock)});
+    const handleSave = () => onChange(buildMock());
+    const hasDifference = !isEqual(value, buildMock()) || value.id === 'new';
+
+    const handleOpen = () => {
+        const target = url.value.charAt(0) === '/' ? url.value : '/' + url.value;
+        window.open(`http://${window.location.hostname}:5261${target}`);
     };
 
-    const setStatusAndMessage = ({status, message}) => {
-        setStatus(status);
-        setMessage(message);
-    };
 
     const title = (
         <div className={styles.title}>
             <Name value={name} onChange={setName} />
-            <Button>Run</Button>
-            <Button type="primary" onClick={handleSave}>
+            <Button onClick={handleOpen} disabled={hasDifference}>
+                Open
+            </Button>
+            <Button type="primary" onClick={handleSave} disabled={!hasDifference}>
                 Save
             </Button>
         </div>
@@ -56,7 +61,12 @@ const Response = ({
             <Methods value={methods} onChange={setMethods} />
             <div className={styles.response}>
                 <div className={styles.header}>
-                    <Status value={{status, message}} onChange={setStatusAndMessage} />
+                    <StatusAndMessage
+                        status={status}
+                        onStatusChange={setStatus}
+                        message={message}
+                        onMessageChange={setMessage}
+                    />
                     <Headers value={headers} onChange={setHeaders} />
                 </div>
                 <Body value={body} onChange={setBody} />

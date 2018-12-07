@@ -1,11 +1,10 @@
 import React from 'react';
 import {Input} from 'antd';
-import styles from './Status.module.scss';
+import styles from './StatusAndMessage.module.scss';
 
-const Status = ({value, onChange}) => {
-    const {status, message} = value;
-    const handleStatusChange = event => onChange({status: +event.target.value, message});
-    const handleMessageChange = event => onChange({status, message: event.target.value});
+const StatusAndMessage = ({status, onStatusChange, message, onMessageChange}) => {
+    const handleStatusChange = event => onStatusChange(+event.target.value);
+    const handleMessageChange = event => onMessageChange(event.target.value);
 
     return (
         <div className={styles.root}>
@@ -20,4 +19,4 @@ const Status = ({value, onChange}) => {
     );
 };
 
-export default Status;
+export default StatusAndMessage;

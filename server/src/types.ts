@@ -9,8 +9,11 @@ export interface Record {
 }
 
 export interface Table<T> {
+    find: (id?: string | number) => T;
+    findBy: (key: string, value: any) => T,
     select: () => T[];
-    create: (record: T) => T;
+    selectBy: (key: string, value: any) => T[];
+    create: (record: T, generateId?: boolean) => T;
     update: (record: T) => T;
     delete: (record: T) => T;
 }
@@ -39,11 +42,6 @@ export namespace Mock {
         PATCH = 'PATCH'
     }
 
-    export enum Status {
-        Running = 1,
-        Suspended = 0
-    }
-
     export namespace Response {
         export namespace Body {
             export enum Type {
@@ -60,7 +58,8 @@ export namespace Mock {
 
         export interface Body {
             type: Body.Type;
-            value: string;
+            raw: string;
+            script: string;
         }
     }
 
@@ -75,7 +74,7 @@ export namespace Mock {
 export interface Mock {
     id: string;
     name: string;
-    status: Mock.Status;
+    running: boolean,
     url: Mock.Url,
     methods: Mock.Method[];
     response: Mock.Response;

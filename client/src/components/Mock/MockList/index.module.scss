@@ -40,6 +40,19 @@
                 > i {
                     margin: 0 5px;
                     line-height: 40px;
+                    transition: .1s;
+
+                    &.running {
+                        color: #90ee90;
+
+                        &:hover {
+                            color: #40a9ff;
+                        }
+                    }
+
+                    &:global(.anticon-delete):hover {
+                        color: #f5222d;
+                    }
                 }
 
                 > span {

@@ -35,7 +35,7 @@ const Headers = ({value, onChange}) => {
 
     const rowSelection = {
         onChange: keys => onChange(value.map((item, index) => {
-            return {...item, using: keys.some(key => +key === +index) ? true : false};
+            return {...item, using: keys.some(key => +key === +index)};
         })),
         selectedRowKeys: value.reduce((prev, {using}, index) => using ? [...prev, index] : prev, [])
     };

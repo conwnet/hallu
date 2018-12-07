@@ -3,10 +3,10 @@ import {Radio} from 'antd';
 import Editor from './Editor';
 import styles from './index.module.scss';
 
-const Body = ({value: body, onChange}) => {
-    const {type, value} = body;
-    const handleTypeChange = event => onChange({type: event.target.value, value});
-    const handleContentChange = value => onChange({type, value});
+const Body = ({value, onChange}) => {
+    const type = value.type;
+    const handleTypeChange = event => onChange({...value, type: event.target.value});
+    const handleContentChange = text => onChange({...value, [type]: text});
 
     return (
         <div className={styles.root}>
@@ -17,7 +17,7 @@ const Body = ({value: body, onChange}) => {
                     <Radio.Button value="script">Script</Radio.Button>
                 </Radio.Group>
             </div>
-            <Editor className={styles.editor} value={value} onChange={handleContentChange} />
+            <Editor className={styles.editor} value={value[type]} onChange={handleContentChange} />
         </div>
     );
 };

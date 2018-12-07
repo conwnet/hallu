@@ -15,8 +15,8 @@ const matchUrl: (urlObj: Mock.Url, url: string) => boolean = ({type, value}, url
     || type === Mock.Url.Type.RegExp && (new RegExp(value)).test(url)
 );
 
-const match: (request: Koa.Request, mock: Mock, ) => boolean = (request, mock) => (
-    mock.status === Mock.Status.Running
+const match: (request: Koa.Request, mock: Mock) => boolean = (request, mock) => (
+    mock.running
     && matchUrl(mock.url, request.url)
     && mock.methods.includes(Mock.Method[request.method.toUpperCase()])
 );
@@ -25,10 +25,19 @@ const calcHeaders: (headers: Mock.Response.Header[]) => {[key: string]: string
     fromPairs(headers.filter(get('using')).map((<any>at(['key', 'value']))))
 );
 
+const execString: (code: string, ...args: any[]) => any = (code, ...args) => {
+    try {
+        const exp = requireFromString(code);
+        return typeof exp === 'function' ? exp(...args) : exp;
+    } catch (e) {
+        return e.toString();
+    }
+};
+
 const calcBody: (ctx: Koa.Context, body: Mock.Response.Body) => Promise<string> = async (ctx, body) => (
     body.type === Mock.Response.Body.Type.Script
-        ? await requireFromString(body.value)(ctx.request, ctx.response)
-        : body.value
+        ? await execString(body.script, ctx.request, ctx.response)
+        : body.raw
 );
 
 const resolve: (ctx: Koa.Context, response: Mock.Response) => void = async (ctx, {status, message, headers, body}) => {
