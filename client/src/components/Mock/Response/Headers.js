@@ -45,7 +45,7 @@ const Headers = ({value, onChange}) => {
     return (
         <div className={styles.root}>
             <div className={styles.title}>
-                <span>Header</span>
+                <span>Headers</span>
                 <span className={styles.buttons}>
                     <Icon type="plus-circle" onClick={handleAdd} />
                 </span>

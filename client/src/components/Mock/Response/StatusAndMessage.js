@@ -9,7 +9,7 @@ const StatusAndMessage = ({status, onStatusChange, message, onMessageChange}) =>
     return (
         <div className={styles.root}>
             <div className={styles.title}>
-                <div>Status</div>
+                <div>Status & Message</div>
             </div>
             <div className={styles.content}>
                 <Input type="number" value={status} onChange={handleStatusChange} />
