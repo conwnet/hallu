@@ -17,7 +17,7 @@ const matchUrl: (urlObj: Mock.Url, url: string) => boolean = ({type, value}, url
 
 const match: (request: Koa.Request, mock: Mock) => boolean = (request, mock) => (
     mock.running
-    && matchUrl(mock.url, request.url)
+    && matchUrl(mock.url, request.path)
     && mock.methods.includes(Mock.Method[request.method.toUpperCase()])
 );
 
