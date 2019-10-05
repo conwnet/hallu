@@ -1,12 +1,11 @@
 {
   "name": "hallu",
-  "version": "0.0.3",
-  "description": "",
-  "main": "index.js",
-  "bin": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "0.0.0",
+  "description": "mock library",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/conwnet/hallu.git"
@@ -18,9 +17,7 @@
     "url": "https://github.com/conwnet/hallu/issues"
   },
   "homepage": "https://github.com/conwnet/hallu#readme",
-  "dependencies": {
-    "commander": "^2.19.0",
-    "hallu-client": "0.0.2",
-    "hallu-server": "0.0.2"
+  "devDependencies": {
+    "lerna": "^3.16.4"
   }
 }
