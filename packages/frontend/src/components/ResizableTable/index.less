@@ -1,0 +1,16 @@
+.root {
+    :global(.react-resizable) {
+        position: relative;
+        background-clip: padding-box;
+    }
+
+    :global(.react-resizable-handle) {
+        position: absolute;
+        width: 10px;
+        height: 100%;
+        bottom: 0;
+        right: -5px;
+        z-index: 1;
+        cursor: col-resize;
+    }
+}

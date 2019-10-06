@@ -1,12 +1,11 @@
 /**
  * @file entry
- * @author zhangguoqing02
+ * @author netcon
  */
 
-import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import App from './components/App';
+import App from './pages/App';
 import store from './store';
 import socket from './socket';
 

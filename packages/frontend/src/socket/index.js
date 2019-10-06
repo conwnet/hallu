@@ -3,9 +3,9 @@
  * @author netcon
  */
 
-import store from '../store';
-import io from 'socket.io-client';
 import EventEmitter from 'events';
+import io from 'socket.io-client';
+import store from '../store';
 
 class Socket extends EventEmitter {
     init() {
